@@ -22,22 +22,22 @@ import java.util.function.Supplier;
 public class BasketPP extends AutoCommandBasePP {
     // For Basket Scoring
 //    private final Pose startPose = new Pose(9, 111, Math.toRadians(270));
-    public final Pose Basket = new Pose(-56, -56, 45);
-    public final Pose BasketForSpline = new Pose(-59, -54.5, 60);
-    public final Pose S1Basket = new Pose(-60.124, -54, Math.toDegrees(1.1506));
-    public final Pose PreloadBasket = new Pose(-58, -53, Math.toDegrees(1.1506));
-    public final Pose S2Basket = new Pose(-64.694, -53, Math.toDegrees(1.621));
+//    public final Pose Basket = new Pose(-56, -56, 45);
+//    public final Pose BasketForSpline = new Pose(-59, -54.5, 60);
+    public final Pose S1Basket = new Pose(-51, -57.4, Math.toRadians(60));
+    public final Pose PreloadBasket = new Pose(-53.5, -57.5, Math.toRadians(50));
+//    public final Pose S2Basket = new Pose(-64.694, -53, Math.toDegrees(1.621));
 
     // The right sample
-    public final Pose S1 = new Pose(-59.7, -48.5, Math.toDegrees(1.12748));
+    public final Pose S1 = new Pose(47.5, 47, Math.toRadians(-90));
     // The middle sample
-    public final Pose S2 = new Pose(-63, -50.8168, Math.toDegrees(1.4281));
+    public final Pose S2 = new Pose(40.3, 47, Math.toRadians(-90));
     // The left sample
-    public final Pose S3 = new Pose(-61.4, -48.8, 113);
+    public final Pose S3 = new Pose(32.9, 47, Math.toRadians(-90));
 
     // Middle point for spline
-    public final Pose splinePoint1 = new Pose(-24.5, -5, 0);
-    public static Pose splinePoint2 = new Pose(-24.5, 0, 0);
+//    public final Pose splinePoint1 = new Pose(-24.5, -5, 0);
+//    public static Pose splinePoint2 = new Pose(-24.5, 0, 0);
 
     public static long basketWaitMs = 630;
     public static long basketWaitForAutoPickMs = 0;
@@ -52,7 +52,7 @@ public class BasketPP extends AutoCommandBasePP {
     public static double S2TurnPos = 0.25;
     public static double S3TurnPos = 0.17;
 
-    public static Pose startPose = new Pose(-40.13, -63.82, Math.toRadians(90));
+    public static Pose startPose = new Pose(-44, -60, Math.toRadians(55));
 
     @Override
     public Pose getStartPose() {
@@ -90,26 +90,27 @@ public class BasketPP extends AutoCommandBasePP {
                 new WaitCommand(basketWaitMs)
                         .alongWith(),
                                 new WaitCommand(S3SlideDelay).andThen(),
-                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(S3)))),
+                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(S3))))
 //                slide.grabCommand(),
-                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(BasketForSpline))))
-                        .alongWith(),
-                new WaitCommand(basketWaitMs)
-                        .alongWith(
-                                new WaitCommand(startStowToPath)
-                                        .andThen(
-                                                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(splinePoint1))))
-                                                        .andThen(new WaitCommand(stopLinearToLLM)))),
-                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(BasketForSpline))))
-                        .alongWith(new WaitCommand(pick2Handoff)),
-                wait(follower, basketWaitForAutoPickMs)
-                        .alongWith(
-                                new WaitCommand(startStowToPath)
-                                        .andThen(
-                                                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(splinePoint2))))
-                                                        .andThen(new WaitCommand(stopLinearToLLM)))),
-                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(BasketForSpline))))
-                        .alongWith(new WaitCommand(pick2Handoff)),
-                wait(follower, basketWaitForAutoPickMs));
+//                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(BasketForSpline))))
+//                        .alongWith(),
+//                new WaitCommand(basketWaitMs)
+//                        .alongWith(
+//                                new WaitCommand(startStowToPath)
+//                                        .andThen(
+//                                                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(splinePoint1))))
+//                                                        .andThen(new WaitCommand(stopLinearToLLM)))),
+//                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(BasketForSpline))))
+//                        .alongWith(new WaitCommand(pick2Handoff)),
+//                wait(follower, basketWaitForAutoPickMs)
+//                        .alongWith(
+//                                new WaitCommand(startStowToPath)
+//                                        .andThen(
+//                                                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(splinePoint2))))
+//                                                        .andThen(new WaitCommand(stopLinearToLLM)))),
+//                followPath(new Path(new BezierLine(new Point(follower.getPose()), new Point(BasketForSpline))))
+//                        .alongWith(new WaitCommand(pick2Handoff)),
+//                wait(follower, basketWaitForAutoPickMs)
+                );
     }
 }
