@@ -6,7 +6,15 @@ import com.arcrobotics.ftclib.geometry.Translation2d;
 import lombok.Getter;
 
 public class Translation2dHelperClass {
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   @Getter public double X, Y;
+=======
+  @Getter public double X, Y, Heading;
+>>>>>>> Stashed changes
+=======
+  @Getter public double X, Y, Heading;
+>>>>>>> Stashed changes
 
   public Translation2dHelperClass(double x, double y) {
     this.X = x;

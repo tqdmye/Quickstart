@@ -36,7 +36,7 @@ import lombok.Getter;
  * <p>Center
  */
 @Config
-public abstract class AutoCommandBase extends LinearOpMode {
+public abstract class AutoCommandBase527 extends LinearOpMode {
   protected LiftClaw liftClaw;
   protected Lift lift;
   protected SlideSuperStructure slide;

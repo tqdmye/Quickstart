@@ -11,7 +11,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand527;
 import org.firstinspires.ftc.teamcode.commands.LineToLinearPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.subsystems.LiftClaw;
@@ -98,7 +98,7 @@ public class Chamber6 extends AutoCommandBase {
         hangSpecimen(),
         new WaitUntilCommand(() -> lift.isPreHang()),
         liftClaw.openClawCommand(),
-        new AutoDriveCommand(drive, sampleToObservation)
+        new AutoDriveCommand527(drive, sampleToObservation)
             .alongWith(new WaitCommand(delayToStow).andThen(stowLiftAndArm())),
         new LineToLinearPathCommand(drive, grabSpecPose.toPose2d()),
         specimenCycle(spec2Pose.toPose2d()),
