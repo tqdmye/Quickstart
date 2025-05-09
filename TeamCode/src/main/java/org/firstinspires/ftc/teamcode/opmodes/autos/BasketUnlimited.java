@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 @Config
 @Autonomous(name = "Basket ∞", group = "Autos")
-public class BasketUnlimited extends AutoCommandBase {
+public class BasketUnlimited extends AutoCommandBase527 {
   // For Basket Scoring
   public static Pose2dHelperClass Basket = new Pose2dHelperClass(-56, -56, 45);
 

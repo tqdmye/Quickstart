@@ -15,8 +15,8 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.SampleAutoAlignCommand;
+import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand527;
+import org.firstinspires.ftc.teamcode.commands.SampleAutoAlignCommand527;
 import org.firstinspires.ftc.teamcode.lib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
@@ -36,7 +36,7 @@ import lombok.Getter;
  * <p>Center
  */
 @Config
-public abstract class AutoCommandBase extends LinearOpMode {
+public abstract class AutoCommandBase527 extends LinearOpMode {
   protected LiftClaw liftClaw;
   protected Lift lift;
   protected SlideSuperStructure slide;
@@ -80,18 +80,18 @@ public abstract class AutoCommandBase extends LinearOpMode {
   }
 
   protected Command followTrajectory(TrajectorySequence trajectorySequence) {
-    return new AutoDriveCommand(drive, trajectorySequence);
+    return new AutoDriveCommand527(drive, trajectorySequence);
   }
 
   protected Command autoSamplePickCommand(Pose2d goalPose) {
     AtomicReference<Double> turnServoSupplier = new AtomicReference<>();
     AtomicReference<Double> slideExtensionSupplier = new AtomicReference<>();
-    SampleAutoAlignCommand sampleAutoAlignCommand =
-        new SampleAutoAlignCommand(
+    SampleAutoAlignCommand527 sampleAutoAlignCommand527 =
+        new SampleAutoAlignCommand527(
             drive, vision, telemetry, turnServoSupplier, slideExtensionSupplier);
     return new SequentialCommandGroup(
-        sampleAutoAlignCommand.alongWith(
-            new WaitUntilCommand(() -> !sampleAutoAlignCommand.isInitializing())
+        sampleAutoAlignCommand527.alongWith(
+            new WaitUntilCommand(() -> !sampleAutoAlignCommand527.isInitializing())
                 .andThen(
                     slide.aimCommand(turnServoSupplier),
                     new InstantCommand(() -> slide.forwardSlideExtension(slideExtensionSupplier)))),

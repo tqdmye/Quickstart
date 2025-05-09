@@ -8,12 +8,12 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 
 import java.util.Optional;
 
-public class AutoDriveCommand extends CommandBase {
+public class AutoDriveCommand527 extends CommandBase {
   private final SampleMecanumDrive drive;
   private final Trajectory trajectory;
   private final TrajectorySequence trajectorySequence;
 
-  public AutoDriveCommand(
+  public AutoDriveCommand527(
       SampleMecanumDrive drive, Optional<Trajectory> traj, Optional<TrajectorySequence> trajs) {
     this.drive = drive;
     if (traj.isPresent() && trajs.isPresent()) {
@@ -23,11 +23,11 @@ public class AutoDriveCommand extends CommandBase {
     trajectorySequence = trajs.orElse(null);
   }
 
-  public AutoDriveCommand(SampleMecanumDrive drive, TrajectorySequence trajs) {
+  public AutoDriveCommand527(SampleMecanumDrive drive, TrajectorySequence trajs) {
     this(drive, Optional.empty(), Optional.ofNullable(trajs));
   }
 
-  public AutoDriveCommand(SampleMecanumDrive drive, Trajectory traj) {
+  public AutoDriveCommand527(SampleMecanumDrive drive, Trajectory traj) {
     this(drive, Optional.of(traj), Optional.empty());
   }
 

@@ -11,7 +11,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand527;
 import org.firstinspires.ftc.teamcode.commands.LineToLinearPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.subsystems.LiftClaw;
@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.utils.Pose2dHelperClass;
 
 @Config
 @Autonomous(name = "Chamber 6", group = "Autos")
-public class Chamber6 extends AutoCommandBase {
+public class Chamber6 extends AutoCommandBase527 {
   public static Pose2d startPose = new Pose2d(38.9 - 23.75, -61.26, Math.toRadians(270));
 
   public static Pose2dHelperClass grabSpecPose = new Pose2dHelperClass(38.9, -62.26, 270);
@@ -98,7 +98,7 @@ public class Chamber6 extends AutoCommandBase {
         hangSpecimen(),
         new WaitUntilCommand(() -> lift.isPreHang()),
         liftClaw.openClawCommand(),
-        new AutoDriveCommand(drive, sampleToObservation)
+        new AutoDriveCommand527(drive, sampleToObservation)
             .alongWith(new WaitCommand(delayToStow).andThen(stowLiftAndArm())),
         new LineToLinearPathCommand(drive, grabSpecPose.toPose2d()),
         specimenCycle(spec2Pose.toPose2d()),

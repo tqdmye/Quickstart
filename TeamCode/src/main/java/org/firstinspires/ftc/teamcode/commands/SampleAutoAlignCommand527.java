@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import lombok.Getter;
 
-public class SampleAutoAlignCommand extends CommandBase {
+public class SampleAutoAlignCommand527 extends CommandBase {
   private final SampleMecanumDrive drive;
   private final Vision vision;
   private final Telemetry telemetry;
@@ -29,7 +29,7 @@ public class SampleAutoAlignCommand extends CommandBase {
 
   @Getter private boolean isInitializing = true;
 
-  public SampleAutoAlignCommand(
+  public SampleAutoAlignCommand527(
       SampleMecanumDrive drive,
       Vision vision,
       Telemetry telemetry,

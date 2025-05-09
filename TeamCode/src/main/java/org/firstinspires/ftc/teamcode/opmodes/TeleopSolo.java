@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.TeleopDriveCommand;
-import org.firstinspires.ftc.teamcode.opmodes.autos.AutoCommandBase;
+import org.firstinspires.ftc.teamcode.opmodes.autos.AutoCommandBase527;
 import org.firstinspires.ftc.teamcode.opmodes.autos.BasketUnlimited;
 import org.firstinspires.ftc.teamcode.opmodes.autos.Chamber6;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
@@ -147,10 +147,10 @@ public class TeleopSolo extends CommandOpMode {
 
     // Pure Handoff
     Supplier<Command> slowHandoffSCommand =
-        () -> AutoCommandBase.slowHandoff(slide, liftClaw).andThen(new WaitCommand(50));
+        () -> AutoCommandBase527.slowHandoff(slide, liftClaw).andThen(new WaitCommand(50));
 
     Supplier<Command> fastHandoffCommand = // TODO: Remove duplicate code
-        () -> AutoCommandBase.fastHandoff(slide, liftClaw);
+        () -> AutoCommandBase527.fastHandoff(slide, liftClaw);
 
     Supplier<Command> handoffCommand =
         () ->
