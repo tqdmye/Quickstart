@@ -127,6 +127,9 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
      */
     @Override
     public void loop() {
+        poseUpdater.update();
+        Vector heading = new Vector(1.0, poseUpdater.getPose().getHeading() - Math.PI / 2);
+        telemetryA.addData("velocity: ", MathFunctions.dotProduct(poseUpdater.getVelocity(), heading));
         if (gamepad1.cross || gamepad1.a) {
             for (DcMotorEx motor : motors) {
                 motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -136,10 +139,10 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
         }
 
         poseUpdater.update();
-        Vector heading = new Vector(1.0, poseUpdater.getPose().getHeading() - Math.PI / 2);
+        //Vector heading = new Vector(1.0, poseUpdater.getPose().getHeading() - Math.PI / 2);
         if (!end) {
             if (!stopping) {
-                if (MathFunctions.dotProduct(poseUpdater.getVelocity(), heading) > VELOCITY) {
+                if (MathFunctions.dotProduct(poseUpdater.getVelocity(), heading) > Math.abs(VELOCITY)) {
                     previousVelocity = MathFunctions.dotProduct(poseUpdater.getVelocity(), heading);
                     previousTimeNano = System.nanoTime();
                     stopping = true;
@@ -162,7 +165,6 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
                 average += acceleration;
             }
             average /= (double) accelerations.size();
-
             telemetryA.addData("lateral zero power acceleration (deceleration):", average);
             telemetryA.update();
         }
