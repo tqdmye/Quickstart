@@ -12,11 +12,6 @@ import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.AutoDriveCommandPP;
-import org.firstinspires.ftc.teamcode.utils.Pose2dHelperClass;
-
-import java.util.function.Supplier;
-
 @Config
 @Autonomous(name = "BasketPP path", group = "Autos")
 public class BasketPP extends AutoCommandBasePP {
