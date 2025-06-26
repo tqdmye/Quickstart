@@ -24,26 +24,34 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.pedropathing.localization.PoseUpdater;
 import com.pedropathing.util.DashboardPoseTracker;
 import com.pedropathing.util.Drawing;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.pathgen.Path;
+import com.pedropathing.pathgen.BezierLine;
+import com.pedropathing.pathgen.Point;
 
 import java.util.Arrays;
 import java.util.List;
 
 import pedroPathing.constants.*;
 
-/**
- * This is the LocalizationTest OpMode. This is basically just a simple mecanum drive attached to a
- * PoseUpdater. The OpMode will print out the robot's pose to telemetry as well as draw the robot
- * on FTC Dashboard (192/168/43/1:8080/dash). You should use this to check the robot's localization.
- *
- * @author Anyi Lin - 10158 Scott's Bots
- * @version 1.0, 5/6/2024
- */
 @Config
-@TeleOp(group = "Teleop Test", name = "Localization Test")
-public class LocalizationTest extends OpMode {
+@TeleOp(group = "Teleop Test", name = "Test Localizer")
+public class TestLocalizer extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;
     private Telemetry telemetryA;
+    private Follower follower;
+
+    // Dashboard配置变量
+    public static double x = -15;
+    public static double y = 62.3;
+    public static double heading = 90;
+    public static double targetX = -15;
+    public static double targetY = 62.3;
+    public static double targetHeading = 90;
+
+    private boolean isFollowingPath = false;
+    private Path currentPath;
 
     private DcMotorEx leftFront;
     private DcMotorEx leftRear;
@@ -51,13 +59,16 @@ public class LocalizationTest extends OpMode {
     private DcMotorEx rightRear;
     private List<DcMotorEx> motors;
 
-    /**
-     * This initializes the PoseUpdater, the mecanum drive motors, and the FTC Dashboard telemetry.
-     */
     @Override
     public void init() {
         Constants.setConstants(FConstants.class, LConstants.class);
         poseUpdater = new PoseUpdater(hardwareMap, FConstants.class, LConstants.class);
+        follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
+
+        // 设置初始位置
+        Pose startPose = new Pose(x, y, Math.toRadians(heading));
+        poseUpdater.setPose(startPose);
+        follower.setStartingPose(startPose);
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 
@@ -85,43 +96,72 @@ public class LocalizationTest extends OpMode {
         telemetryA = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetryA.addLine("This will print your robot's position to telemetry while "
                 + "allowing robot control through a basic mecanum drive on gamepad 1.");
+        telemetryA.addLine("Press A to follow path to target position");
+        telemetryA.addLine("Press B to stop and reset motors");
         telemetryA.update();
 
         Drawing.drawRobot(poseUpdater.getPose(), "#4CAF50");
         Drawing.sendPacket();
     }
 
-    /**
-     * This updates the robot's pose estimate, the simple mecanum drive, and updates the FTC
-     * Dashboard telemetry with the robot's position as well as draws the robot's position.
-     */
     @Override
     public void loop() {
         poseUpdater.update();
         dashboardPoseTracker.update();
 
-        double y = -gamepad1.left_stick_y; // Remember, this is reversed!
-        double x = gamepad1.left_stick_x; // this is strafing
-        double rx = gamepad1.right_stick_x;
+        if (isFollowingPath) {
+            follower.update();
+            if (!follower.isBusy()) {
+                isFollowingPath = false;
+            }
+        } else {
+            double y = -gamepad1.left_stick_y;
+            double x = gamepad1.left_stick_x;
+            double rx = gamepad1.right_stick_x;
 
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio, but only when
-        // at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double leftFrontPower = (y + x + rx) / denominator;
-        double leftRearPower = (y - x + rx) / denominator;
-        double rightFrontPower = (y - x - rx) / denominator;
-        double rightRearPower = (y + x - rx) / denominator;
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double leftFrontPower = (y + x + rx) / denominator;
+            double leftRearPower = (y - x + rx) / denominator;
+            double rightFrontPower = (y - x - rx) / denominator;
+            double rightRearPower = (y + x - rx) / denominator;
 
-        leftFront.setPower(leftFrontPower);
-        leftRear.setPower(leftRearPower);
-        rightFront.setPower(rightFrontPower);
-        rightRear.setPower(rightRearPower);
+            leftFront.setPower(leftFrontPower);
+            leftRear.setPower(leftRearPower);
+            rightFront.setPower(rightFrontPower);
+            rightRear.setPower(rightRearPower);
+        }
 
-        telemetryA.addData("x", poseUpdater.getPose().getX());
-        telemetryA.addData("y", poseUpdater.getPose().getY());
-        telemetryA.addData("heading", poseUpdater.getPose().getHeading());
-        telemetryA.addData("total heading", poseUpdater.getTotalHeading());
+        // 当按下A键时，生成并跟随路径
+        if (gamepad1.a && !isFollowingPath) {
+            Pose currentPose = poseUpdater.getPose();
+            Pose targetPose = new Pose(targetX, targetY, Math.toRadians(targetHeading));
+
+            currentPath = new Path(new BezierLine(
+                    new Point(currentPose),
+                    new Point(targetPose)
+            ));
+            currentPath.setLinearHeadingInterpolation(
+                    currentPose.getHeading(),
+                    targetPose.getHeading()
+            );
+
+            follower.followPath(currentPath);
+            isFollowingPath = true;
+        }
+
+        // 当按下B键时，停止路径跟随并重置电机
+        if (gamepad1.b) {
+            isFollowingPath = false;
+            leftFront.setPower(0);
+            leftRear.setPower(0);
+            rightFront.setPower(0);
+            rightRear.setPower(0);
+        }
+
+        telemetryA.addData("Current X Position (in): ", "%.3f", poseUpdater.getPose().getX());
+        telemetryA.addData("Current Y Position (in): ", "%.3f", poseUpdater.getPose().getY());
+        telemetryA.addData("Current Heading: ", Math.toDegrees(poseUpdater.getPose().getHeading()));
+        telemetryA.addData("isFollowingPath", isFollowingPath);
         telemetryA.update();
 
         Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
